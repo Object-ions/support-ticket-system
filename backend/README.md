@@ -62,7 +62,7 @@ JWT_SECRET = < JWT secret >
 
 5. Start the server:
    ```bash
-   npm start
+   npm run server
    ```
 
 ## Features
