@@ -2,6 +2,7 @@ const asyncHandler = require('express-async-handler');
 
 const User = require('../models/userModel');
 const Ticket = require('../models/ticketModel');
+const { request } = require('express');
 
 // Get user tickets
 // GET - /api/tickets
@@ -51,6 +52,60 @@ const getTicket = asyncHandler(async (req, res) => {
   res.status(200).json(ticket);
 });
 
+// Delete single ticket
+// DELETE - /api/tickets/:id
+// private
+const deleteTicket = asyncHandler(async (req, res) => {
+  // Get ticket using th id and JWT
+  const ticket = await Ticket.findById(req.params.id);
+
+  // Check if ticket exist
+  if (!ticket) {
+    res.status(404);
+    throw new Error('Ticket not found');
+  }
+
+  // limit only to the logged in user
+  if (ticket.user.toString() !== req.user.id) {
+    res.status(401);
+    throw new Error('Not authorized');
+  }
+
+  await Ticket.findByIdAndDelete(req.params.id);
+
+  // returning
+  res.status(200).json({ success: true });
+});
+
+// Update single ticket
+// PUT - /api/tickets/:id
+// private
+const updateTicket = asyncHandler(async (req, res) => {
+  // Get a single ticket by id
+  const ticket = await Ticket.findById(req.params.id);
+
+  // Check if ticket exist
+  if (!ticket) {
+    res.status(404);
+    throw new Error('Ticket not found');
+  }
+
+  // limit only to the logged in user
+  if (ticket.user.toString() !== req.user.id) {
+    res.status(401);
+    throw new Error('Not authorized');
+  }
+
+  const updatedTicket = await Ticket.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    { new: true }
+  );
+
+  // returning
+  res.status(200).json(updatedTicket);
+});
+
 // Create new ticket
 // POST - /api/tickets/new
 // private
@@ -84,4 +139,6 @@ module.exports = {
   getTickets,
   getTicket,
   createTicket,
+  deleteTicket,
+  updateTicket,
 };
