@@ -15,7 +15,7 @@ const Tickets = () => {
   useEffect(() => {
     return () => {
       if (isSuccess) {
-        dispatch(reset);
+        dispatch(reset());
       }
     };
   }, [dispatch, isSuccess]);
