@@ -21,7 +21,8 @@ const Ticket = () => {
     }
 
     dispatch(getTicket(ticketId));
-  }, [isError, message, ticketId, dispatch]);
+    //eslint-disable-next-line
+  }, [isError, message, ticketId]);
 
   if (isLoading) {
     return <Spinner />;
@@ -41,6 +42,14 @@ const Ticket = () => {
             {ticket.status}
           </span>
         </h2>
+        <h3>
+          Date Submitted: {new Date(ticket.createdAt).toLocaleString('en-US')}
+          <hr />
+          <div className="ticket-desc">
+            <h3>Description of Issue:</h3>
+            <p>{ticket.description}</p>
+          </div>
+        </h3>
       </header>
     </div>
   );
