@@ -1,20 +1,15 @@
 const asyncHandler = require('express-async-handler');
 
-const User = require('../models/userModel');
 const Note = require('../models/noteModel');
+const Ticket = require('../models/ticketModel');
 
-// Get notes for a ticket
-// GET - /api/tickets/:ticketId/notes
-// private
+// NOTE: no need to get the user, we already have them on req object from
+// protect middleware. The protect middleware already checks for valid user.
+
+// @desc    Get notes for a ticket
+// @route   GET /api/tickets/:ticketId/notes
+// @access  Private
 const getNotes = asyncHandler(async (req, res) => {
-  // Get user using th id and JWT
-  const user = await User.findById(req.user.id);
-
-  if (!user) {
-    res.status(401);
-    throw new Error('User not found');
-  }
-
   const ticket = await Ticket.findById(req.params.ticketId);
 
   if (ticket.user.toString() !== req.user.id) {
@@ -27,18 +22,10 @@ const getNotes = asyncHandler(async (req, res) => {
   res.status(200).json(notes);
 });
 
-// Create ticket note
-// POST - /api/tickets/:ticketId/notes
-// private
+// @desc    Create ticket note
+// @route   POST /api/tickets/:ticketId/notes
+// @access  Private
 const addNote = asyncHandler(async (req, res) => {
-  // Get user using th id and JWT
-  const user = await User.findById(req.user.id);
-
-  if (!user) {
-    res.status(401);
-    throw new Error('User not found');
-  }
-
   const ticket = await Ticket.findById(req.params.ticketId);
 
   if (ticket.user.toString() !== req.user.id) {
@@ -58,5 +45,5 @@ const addNote = asyncHandler(async (req, res) => {
 
 module.exports = {
   getNotes,
-  addNotes,
+  addNote,
 };
