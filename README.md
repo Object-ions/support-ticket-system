@@ -114,10 +114,6 @@ npm run dev
 
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
-
-## License
-
 [MIT](https://choosealicense.com/licenses/mit/)
 
 Copyright (c) 2024 Moshe Atia Poston.
